@@ -27,7 +27,7 @@ class CreateCarsTable extends Migration
             $table->boolean("bluetooth");
             $table->boolean("status");
             $table->String("image");
-            $table->string("type"); 
+            $table->string("type")->nullable(); 
             $table->foreign('type')->references("type")->on('car_types')->onUpdate('cascade')->onDelete('restrict');
         
 

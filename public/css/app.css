@@ -72,6 +72,20 @@
   }
 }
 
+.myContainer{
+  background-color: rgba(52, 152, 252, 0.7);
+  padding: 1.5rem;
+  border-radius: 15px;
+  font-size: 1.0rem;
+  padding: 0.15rem;
+  margin-bottom: 0.5rem;
+}
+
+.myimg{
+  border-radius: 50%;
+  padding:10px;
+}
+
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);
