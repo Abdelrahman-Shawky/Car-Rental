@@ -22,7 +22,11 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::post('/cars',[HomeController::class,'show']);
+Route::get('/cars',[HomeController::class,'show']);
+
+Route::post('/cars',[HomeController::class,'filter']);
+// Route::post('/home',[HomeController::class,'filter2']);
+
 
 
 
