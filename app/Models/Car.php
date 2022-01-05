@@ -23,10 +23,15 @@ class Car extends Model
         'bluetooth',
         'status',
         'image',
-        'type'
+        'type',
+        'officeNo'
     ];
 
     public function carType(){
         return $this->hasOne('App\Models\CarType','type','type');
+    }
+
+    public function carOffice(){
+        return $this->hasOne('App\Models\Office','officeNo','officeNo');
     }
 }

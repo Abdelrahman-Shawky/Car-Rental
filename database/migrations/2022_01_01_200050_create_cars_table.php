@@ -29,9 +29,9 @@ class CreateCarsTable extends Migration
             $table->String("image");
             $table->string("type")->nullable(); 
             $table->foreign('type')->references("type")->on('car_types')->onUpdate('cascade')->onDelete('restrict');
+            $table->unsignedInteger('OfficeNo')->nullable();
+            $table->foreign('officeNo')->references("officeNo")->on('offices')->onUpdate('cascade')->onDelete('restrict');
             $table->timestamps();
-
-        
 
         });
     }

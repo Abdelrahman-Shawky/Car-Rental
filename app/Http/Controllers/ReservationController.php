@@ -6,6 +6,8 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Models\Car;
 use App\Models\Customer;
+use App\Models\Office;
+
 use Illuminate\Validation\Concerns\FilterEmailValidation;
 
 class ReservationController extends Controller
@@ -67,12 +69,14 @@ class ReservationController extends Controller
             ['start_date','<=',$pickupDate],
             ['end_date','>=',$dropoffDate]
         ])->pluck('plate_id');
-        // $reservations = Reservation::where('start_date','>=',$pickupDate)
-        // ->orWhere('start_date','>',$pickupDate)
-        // ->pluck('plate_id');
-        echo $reservations;
 
-        $cars = Car::whereNotIn('plate_id',$reservations)->get();
+        // $carsXoffices = Car::join('offices','cars.officeNo','=','offices.officeNo');
+        $office = Office::where('location','=',$pickupLocation)->pluck('officeNo');
+
+        $cars = Car::whereNotIn('plate_id',$reservations)
+        ->whereIn('officeNo',$office)
+        ->where('status','=',1)
+        ->get();
 
         
         return view('carList',[
@@ -194,6 +198,7 @@ class ReservationController extends Controller
         $filteredTransmissions = Car::whereIn('transmission',$filteredTransmissions)->groupBy('transmission')->pluck('transmission');
         echo $filteredTransmissions;
 
+        //Get Available Cars
         $reservations = Reservation::where([
             ['start_date','<=',$dropoffDate],
             ['start_date','>=',$pickupDate]
@@ -207,18 +212,18 @@ class ReservationController extends Controller
         ])->pluck('plate_id');
         echo $reservations;
 
-        // $cars = Car::whereNotIn('plate_id',$reservations)->get();
-
+        $office = Office::where('location','=',$pickupLocation)->pluck('officeNo');
 
         $cars = Car::whereNotIn('plate_id',$reservations)
+        ->whereIn('officeNo',$office)
         ->whereIn('manufacturer',$filteredManufacturers)
         ->whereIn('model',$filteredModels)
         ->whereIn('year',$filteredYears)
         ->whereIn('type',$filteredTypes)
         ->whereIn('transmission',$filteredTransmissions)
+        ->where('status','=',1)
         ->get();
 
-        // echo $cars;
         if($cars == null){
             echo "dehk";
             return redirect()->back()->with('status','Dehkk');

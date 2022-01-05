@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Car;
+use App\Models\Office;
 use DB;
 
 
@@ -26,7 +27,10 @@ class HomeController extends Controller
      */
     public function index()
     {  
-        return view('home');
+        $locations = Office::groupby('location')->pluck('location');
+        return view('home',[
+            "locations"=>$locations
+        ]);
     }
 
     public function show()
