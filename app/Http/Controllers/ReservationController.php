@@ -6,14 +6,10 @@ use App\Models\Reservation;
 use Illuminate\Http\Request;
 use App\Models\Car;
 use App\Models\Customer;
+use Illuminate\Validation\Concerns\FilterEmailValidation;
 
 class ReservationController extends Controller
 {
-
-    private $pickupDate;
-    private $dropoffDate;
-    private $pickupLocation;
-    private $dropoffLocation;
 
     public function reserve($id,$pickupDate,$dropoffDate,$pickupLocation,$dropoffLocation){
 
@@ -42,11 +38,6 @@ class ReservationController extends Controller
 
         return redirect()->back()->with('status','Reserved Successfully');
 
-
-
-
-
-
     }
 
     public function datePicker(Request $request){
@@ -66,11 +57,19 @@ class ReservationController extends Controller
 
 
         $reservations = Reservation::where([
-            ['start_date','<=',$pickupDate],
-            ['end_date','>=',$pickupDate]
+            ['start_date','<=',$dropoffDate],
+            ['start_date','>=',$pickupDate]
         ])->orWhere([
-            ['start_date','>',$pickupDate]
+            ['end_date','>=',$pickupDate],
+            ['end_date','<=',$dropoffDate]
+        ])
+        ->orWhere([
+            ['start_date','<=',$pickupDate],
+            ['end_date','>=',$dropoffDate]
         ])->pluck('plate_id');
+        // $reservations = Reservation::where('start_date','>=',$pickupDate)
+        // ->orWhere('start_date','>',$pickupDate)
+        // ->pluck('plate_id');
         echo $reservations;
 
         $cars = Car::whereNotIn('plate_id',$reservations)->get();
@@ -98,7 +97,7 @@ class ReservationController extends Controller
 
     public function filter(Request $request,$pickupDate,$dropoffDate,$pickupLocation,$dropoffLocation)
     {
-
+        //Filter according to filled checkboxes
         $manufacturers = Car::groupBy('manufacturer')->pluck('manufacturer');
         echo $pickupDate;
         $i = 0;
@@ -195,13 +194,31 @@ class ReservationController extends Controller
         $filteredTransmissions = Car::whereIn('transmission',$filteredTransmissions)->groupBy('transmission')->pluck('transmission');
         echo $filteredTransmissions;
 
+        $reservations = Reservation::where([
+            ['start_date','<=',$dropoffDate],
+            ['start_date','>=',$pickupDate]
+        ])->orWhere([
+            ['end_date','>=',$pickupDate],
+            ['end_date','<=',$dropoffDate]
+        ])
+        ->orWhere([
+            ['start_date','<=',$pickupDate],
+            ['end_date','>=',$dropoffDate]
+        ])->pluck('plate_id');
+        echo $reservations;
 
-        $cars = Car::whereIn('manufacturer',$filteredManufacturers)
+        // $cars = Car::whereNotIn('plate_id',$reservations)->get();
+
+
+        $cars = Car::whereNotIn('plate_id',$reservations)
+        ->whereIn('manufacturer',$filteredManufacturers)
         ->whereIn('model',$filteredModels)
         ->whereIn('year',$filteredYears)
         ->whereIn('type',$filteredTypes)
         ->whereIn('transmission',$filteredTransmissions)
         ->get();
+
+        // echo $cars;
         if($cars == null){
             echo "dehk";
             return redirect()->back()->with('status','Dehkk');

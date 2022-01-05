@@ -22,10 +22,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::post('/home', [ReservationController::class, 'datePicker']);
+Route::get('/cars', [ReservationController::class, 'datePicker']);
 
 
-Route::get('/cars',[HomeController::class,'show']);
+// Route::get('/cars',[HomeController::class,'show']);
 
 Route::post('/cars/{pickupDate}/{dropoffDate}/{pickupLocation}/{dropoffLocation}',[ReservationController::class,'filter']);
 

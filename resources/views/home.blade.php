@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <form method="Post" action="/home" enctype="multipart/form-data">
+                    <form method="GET" action="/cars" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col">
