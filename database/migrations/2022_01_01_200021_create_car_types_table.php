@@ -15,8 +15,9 @@ class CreateCarTypesTable extends Migration
     {
         Schema::create('car_types', function (Blueprint $table) {
             $table->string('type')->primary();
-            $table->integer('no_psasengers');
+            $table->integer('no_passengers');
             $table->integer('no_bags');
+            $table->timestamps();
         });
     }
 

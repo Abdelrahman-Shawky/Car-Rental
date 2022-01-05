@@ -20,4 +20,9 @@ class Reservation extends Model
         'SSN',
         'user_id'
     ];
+
+    protected $casts = [
+        'start_date' => 'datetime:Y-m-d',
+        'end_date' => 'datetime:Y-m-d',
+    ];
 }

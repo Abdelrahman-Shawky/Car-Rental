@@ -14,17 +14,20 @@
                         </div>
                     @endif
 
-                    <form method="GET" action="/cars" enctype="multipart/form-data">
+                    <form method="Post" action="/home" enctype="multipart/form-data">
                         @csrf
                         <div class="row mb-3">
                             <div class="col">
                                 <input id="pickupLocation" type="text" class="form-control" name="pickupLocation" autofocus>
                             </div>
                             <div class="col">
-                                <input class="p-2" type="date" id="datePickUp" class="form-control" name="datePickUp">
+                                <input id="dropoffLocation" type="text" class="form-control" name="dropoffLocation" autofocus>
                             </div>
                             <div class="col">
-                                <input class="p-2" type="date" id="dateDropOff" class="form-control" name="dateDropOff">
+                                <input class="p-2" type="date" id="datePickUp" class="form-control" name="pickupDate">
+                            </div>
+                            <div class="col">
+                                <input class="p-2" type="date" id="dateDropOff" class="form-control" name="dropoffDate">
                             </div>
                         </div>
                         <div class="row mb-0">

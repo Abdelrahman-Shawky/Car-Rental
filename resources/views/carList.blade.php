@@ -3,13 +3,11 @@
 @section('content')
 
 
-<script type="application/javascript" src="filter.js"></script>
-<script type="application/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+  
 
 <div class="sidenav">
     <div>
-        <form method="POST"  action="/cars" enctype="multipart/form-data">
+        <form method="POST"  action="/cars/{{$pickupDate}}/{{$dropoffDate}}/{{$pickupLocation}}/{{$dropoffLocation}}" enctype="multipart/form-data">
         @csrf
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 <div class="accordion-item">
@@ -165,18 +163,22 @@
                     <h1>Choose Your Vehicle</h1>
                     <div>
                         @foreach($cars as $car)
-                            <div class="myContainer">
-                                <div class="row mb-3">
-                                <div class="col">
-                                <img src="{{ asset('images/'.$car->image) }}" width="250px" height="150px" alt="Image" class="myimg">
+                        <div class="container myContainer p-4">
+                                <div class="row-md-4">
+                                    <div class="col">
+                                        <img src="{{ asset('images/'.$car->image) }}" width="250px" height="150px" alt="Image" class="myimg">
+                                    </div>
+                                    <div class="col">
+                                        <p>{{$car->manufacturer}}</p>
+                                        <p>{{$car->model}}</p>
+                                        <p>{{$car->year}}</p>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                <p>{{$car->manufacturer}}</p>
-                                <p>{{$car->model}}</p>
-                                <p>{{$car->year}}</p>
-                                </div>
-                            </div>
+                            <a  href="#" data-toggle="modal" data-target="#carModal{{$car->plate_id}}">
+                                <button class="btn btn-primary" type="submit" value="submit" id="submit">Reserve</button>
+                            </a>
                         </div>
+                        @include('reservation.modal')
                         @endforeach
                     </div>
             </div>

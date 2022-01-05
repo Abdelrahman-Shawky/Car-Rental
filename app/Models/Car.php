@@ -25,4 +25,8 @@ class Car extends Model
         'image',
         'type'
     ];
+
+    public function carType(){
+        return $this->hasOne('App\Models\CarType','type','type');
+    }
 }

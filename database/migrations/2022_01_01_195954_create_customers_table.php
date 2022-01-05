@@ -27,6 +27,8 @@ class CreateCustomersTable extends Migration
             $table->string('city');
             $table->string('country');
             $table->string('image')->nullable();
+            $table->timestamps();
+
         });
     }
 

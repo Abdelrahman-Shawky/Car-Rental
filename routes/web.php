@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReservationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,10 +22,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/home', [ReservationController::class, 'datePicker']);
+
 
 Route::get('/cars',[HomeController::class,'show']);
 
-Route::post('/cars',[HomeController::class,'filter']);
+Route::post('/cars/{pickupDate}/{dropoffDate}/{pickupLocation}/{dropoffLocation}',[ReservationController::class,'filter']);
+
+Route::post('/reserve/{id}/{pickupDate}/{dropoffDate}/{pickupLocation}/{dropoffLocation}',[ReservationController::class,'reserve']);
 // Route::post('/home',[HomeController::class,'filter2']);
 
 

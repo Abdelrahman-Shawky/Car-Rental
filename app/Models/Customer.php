@@ -23,4 +23,4 @@ class Customer extends Model
         'image'
     ];
 }
-}
+

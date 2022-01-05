@@ -18,6 +18,8 @@ class CreateCarLocationsTable extends Migration
             $table->string('location');
             $table->primary(['plate_id', 'location']);
             $table->foreign('plate_id')->references("plate_id")->on('cars')->onUpdate('cascade')->onDelete('restrict');
+            $table->timestamps();
+
 
 
         });

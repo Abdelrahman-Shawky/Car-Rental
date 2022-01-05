@@ -14,4 +14,8 @@ class CarType extends Model
         'no_passengers',
         'no_bags'
     ];
+
+    public function car(){
+        return $this->belongsTo(Car::class,'type','type');
+        }
 }
