@@ -54,7 +54,7 @@ function fill2(input){
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Find Your Vehicle') }}</div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -63,14 +63,23 @@ function fill2(input){
                         </div>
                     @endif
 
+                    @if(!is_null(Auth::user()->Customer))
                     <form method="GET" action="/cars" enctype="multipart/form-data">
+                    @else
+                    <form method="GET" action="/completeProfile" enctype="multipart/form-data">
+                    @endif
                         @csrf
                         <div class="row mb-3">
                             <!-- <div class="col">
                                 <input id="pickupLocation" type="text" class="form-control" name="pickupLocation" autofocus>
                             </div> -->
                             <div class="col">
-                            <input type="text" id="myInput1" class="myInput" onkeyup="dropdown1()" placeholder="Search.." name="pickupLocation"  autocomplete="off">
+                            <input type="text" id="myInput1" class="myInput @error('pickupLocation') is-invalid @enderror" onkeyup="dropdown1()" placeholder="Search.." name="pickupLocation"  autocomplete="off">
+                                @error('pickupLocation')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                                 <ul id="myUL1" class="myUL">
                                     @foreach($locations as $location)
                                         <li><a onclick="fill1('{{$location}}')">{{$location}}</a></li>
@@ -78,7 +87,12 @@ function fill2(input){
                                 </ul>
                             </div>
                             <div class="col">
-                            <input type="text" id="myInput2" class="myInput" onkeyup="dropdown2()" placeholder="Search.." name="dropoffLocation"  autocomplete="off">
+                            <input type="text" id="myInput2" class="myInput @error('dropoffLocation') is-invalid @enderror" onkeyup="dropdown2()" placeholder="Search.." name="dropoffLocation"  autocomplete="off">
+                                @error('dropoffLocation')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                                 <ul id="myUL2" class="myUL">
                                     @foreach($locations as $location)
                                         <li><a onclick="fill2('{{$location}}')">{{$location}}</a></li>
@@ -89,10 +103,20 @@ function fill2(input){
                                 <input id="dropoffLocation" type="text" class="form-control" name="dropoffLocation" autofocus>
                             </div> -->
                             <div class="col">
-                                <input class="p-2" type="date" id="datePickUp" class="form-control" name="pickupDate">
+                                <input class="p-2" type="date" id="datePickUp" class="form-control  @error('pickupDate') is-invalid @enderror" name="pickupDate">
+                                @error('pickupDate')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <div class="col">
-                                <input class="p-2" type="date" id="dateDropOff" class="form-control" name="dropoffDate">
+                                <input class="p-2" type="date" id="dateDropOff" class="form-control  @error('dropoffDate') is-invalid @enderror" name="dropoffDate">
+                                @error('dropoffDate')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row mb-0">

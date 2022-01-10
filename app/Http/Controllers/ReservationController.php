@@ -13,11 +13,19 @@ use Illuminate\Validation\Concerns\FilterEmailValidation;
 class ReservationController extends Controller
 {
 
-    public function reserve($id,$pickupDate,$dropoffDate,$pickupLocation,$dropoffLocation){
+
+    public function delete(Request $request, $res_id){
+        $reservation = Reservation::where('res_id','=',$res_id)->first();
+
+        $reservation->delete();
+        return redirect()->back()->with('status','Cancelled Successfully');
+
+    }
+
+    public function reserve($id,$pickupDate,$dropoffDate,$pickupLocation,$dropoffLocation,$numOfDays){
 
         $reservation = new Reservation();
         $reservation->start_date = $pickupDate;
-        echo $pickupDate;
 
         $getResId = Reservation::count();
 
@@ -26,8 +34,8 @@ class ReservationController extends Controller
         $reservation->pickup_location = $pickupLocation;
         $reservation->dropoff_location = $dropoffLocation;
 
-        $carSelected = Car::where('plate_id','=',$id)->get();
-        $reservation->total_amount = 10;
+        $carSelected = Car::where('plate_id','=',$id)->first();
+        $reservation->total_amount = $carSelected->price* $numOfDays;
         $reservation->plate_id = $id;
 
         $user = auth()->user();
@@ -36,13 +44,25 @@ class ReservationController extends Controller
 
         $reservation->SSN = $custumer->SSN;
         $reservation->user_id = $user->id;
+        $reservation->paid = 0;
         $reservation->save();
 
-        return redirect()->back()->with('status','Reserved Successfully');
+        $locations = Office::groupby('location')->pluck('location');
+
+
+        // return redirect()->back()->with('status','Reserved Successfully');
+        return redirect('/home')->with('status','Reserved Successfully');
 
     }
 
     public function datePicker(Request $request){
+
+        $this->validate($request,[
+            'pickupLocation'=>'required|regex:/^[\pL\s\-]+$/u',
+            'dropoffLocation'=>'required|regex:/^[\pL\s\-]+$/u',
+            'pickupDate'=>'required',
+            'dropoffDate'=>'required'
+        ]);
 
         
         // $cars = Car::get();
@@ -78,6 +98,10 @@ class ReservationController extends Controller
         ->where('status','=',1)
         ->get();
 
+        $pickupDate2 = \Carbon\Carbon::parse($request->input('pickupDate'));
+        $dropoffDate2 = \Carbon\Carbon::parse($request->input('dropoffDate'));
+
+        $numOfDays = $dropoffDate2->diffInDays($pickupDate2);
         
         return view('carList',[
             'cars'=>$cars,
@@ -94,16 +118,17 @@ class ReservationController extends Controller
             'pickupDate'=>$pickupDate,
             'dropoffDate'=>$dropoffDate,
             'pickupLocation'=>$pickupLocation,
-            'dropoffLocation'=>$dropoffLocation
+            'dropoffLocation'=>$dropoffLocation,
+            'numOfDays'=>$numOfDays
         ]);
 
     }
 
-    public function filter(Request $request,$pickupDate,$dropoffDate,$pickupLocation,$dropoffLocation)
+    public function filter(Request $request,$pickupDate,$dropoffDate,$pickupLocation,$dropoffLocation,$numOfDays)
     {
         //Filter according to filled checkboxes
         $manufacturers = Car::groupBy('manufacturer')->pluck('manufacturer');
-        echo $pickupDate;
+
         $i = 0;
         $filteredManufacturers=null;
         foreach($manufacturers as $manufacturer){
@@ -120,7 +145,6 @@ class ReservationController extends Controller
             }
         }
         $filteredManufacturers = Car::whereIn('manufacturer',$filteredManufacturers)->groupBy('manufacturer')->pluck('manufacturer');
-        echo $filteredManufacturers;
 
         $models = Car::groupBy('model')->pluck('model');
         $i = 0;
@@ -139,7 +163,6 @@ class ReservationController extends Controller
             }
         }
         $filteredModels = Car::whereIn('model',$filteredModels)->groupBy('model')->pluck('model');
-        echo $filteredModels;
 
         $years = Car::groupBy('year')->pluck('year');
         $i = 0;
@@ -158,7 +181,6 @@ class ReservationController extends Controller
             }
         }
         $filteredYears = Car::whereIn('year',$filteredYears)->groupBy('year')->pluck('year');
-        echo $filteredYears;
 
         $types = Car::groupBy('type')->pluck('type');
         $i = 0;
@@ -177,7 +199,6 @@ class ReservationController extends Controller
             }
         }
         $filteredTypes = Car::whereIn('type',$filteredTypes)->groupBy('type')->pluck('type');
-        echo $filteredTypes;
 
         $transmissions = Car::groupBy('transmission')->pluck('transmission');
         $i = 0;
@@ -196,7 +217,6 @@ class ReservationController extends Controller
             }
         }
         $filteredTransmissions = Car::whereIn('transmission',$filteredTransmissions)->groupBy('transmission')->pluck('transmission');
-        echo $filteredTransmissions;
 
         //Get Available Cars
         $reservations = Reservation::where([
@@ -210,7 +230,6 @@ class ReservationController extends Controller
             ['start_date','<=',$pickupDate],
             ['end_date','>=',$dropoffDate]
         ])->pluck('plate_id');
-        echo $reservations;
 
         $office = Office::where('location','=',$pickupLocation)->pluck('officeNo');
 
@@ -225,8 +244,7 @@ class ReservationController extends Controller
         ->get();
 
         if($cars == null){
-            echo "dehk";
-            return redirect()->back()->with('status','Dehkk');
+            return redirect('/home')->with('status','No Matches Found');
         }
 
         return view('carList',[
@@ -244,7 +262,8 @@ class ReservationController extends Controller
             'pickupDate'=>$pickupDate,
             'dropoffDate'=>$dropoffDate,
             'pickupLocation'=>$pickupLocation,
-            'dropoffLocation'=>$dropoffLocation    
+            'dropoffLocation'=>$dropoffLocation,
+            'numOfDays'=>$numOfDays    
         ]);    
     }
 }

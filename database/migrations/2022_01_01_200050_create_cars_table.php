@@ -19,10 +19,9 @@ class CreateCarsTable extends Migration
             $table->string("model");
             $table->integer("year");
             $table->double("price");
-            $table->double("insurance");
             $table->string("transmission");
             $table->string("gas_type");
-            $table->string("fuel_cumsumption");
+            $table->string("fuel_consumption");
             $table->boolean("air_conditioning");
             $table->boolean("bluetooth");
             $table->boolean("status");

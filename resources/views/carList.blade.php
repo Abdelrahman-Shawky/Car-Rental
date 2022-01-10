@@ -7,7 +7,7 @@
 
 <div class="sidenav">
     <div>
-        <form method="POST"  action="/cars/{{$pickupDate}}/{{$dropoffDate}}/{{$pickupLocation}}/{{$dropoffLocation}}" enctype="multipart/form-data">
+        <form method="POST"  action="/cars/{{$pickupDate}}/{{$dropoffDate}}/{{$pickupLocation}}/{{$dropoffLocation}}/{{$numOfDays}}" enctype="multipart/form-data">
         @csrf
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 <div class="accordion-item">
@@ -145,7 +145,7 @@
                     </div>
                     </div>
                 </div>
-                <button class="btn btn-primary" type="submit" value="submit" id="submit">Filter</button>
+                <button class="btn btn-primary" type="submit" value="submit" id="submit" style="margin:10px;">Filter</button>
             </div>
         </form>
     </div>
@@ -162,24 +162,31 @@
                     @endif
                     <h1>Choose Your Vehicle</h1>
                     <div>
+                        @if(count($cars)>0)
                         @foreach($cars as $car)
                         <div class="container myContainer p-4">
                                 <div class="row-md-4">
-                                    <div class="col">
+                                    <div class="col-md-4">
                                         <img src="{{ asset('images/'.$car->image) }}" width="250px" height="150px" alt="Image" class="myimg">
                                     </div>
-                                    <div class="col">
+                                    <div class="col-md-4">
                                         <p>{{$car->manufacturer}}</p>
                                         <p>{{$car->model}}</p>
                                         <p>{{$car->year}}</p>
                                     </div>
                                 </div>
+                                <p>Price Per Day: {{$car->price}}</p>
+                                <p>Price:{{$car->price*$numOfDays}}</p>
                             <a  href="#" data-toggle="modal" data-target="#carModal{{$car->plate_id}}">
+                                
                                 <button class="btn btn-primary" type="submit" value="submit" id="submit">Reserve</button>
                             </a>
                         </div>
                         @include('reservation.modal')
                         @endforeach
+                        @else
+                        <p>No Matches Found</p>
+                        @endif
                     </div>
             </div>
         </div>

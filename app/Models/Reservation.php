@@ -9,6 +9,11 @@ class Reservation extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'res_id';
+    public $incrementing = false;
+
+
+
     protected $fillable = [
         'res_id',
         'start_date',
@@ -25,4 +30,8 @@ class Reservation extends Model
         'start_date' => 'datetime:Y-m-d',
         'end_date' => 'datetime:Y-m-d',
     ];
+
+    public function reservation(){
+        return $this->belongsTo(Car::class,'plate_id','plate_id');
+    }
 }

@@ -94,7 +94,7 @@
   z-index: 1; /* Stay on top */
   margin-top: 4.5rem;
   left: 20px;
-  background-color: rgb(236, 236, 236); /* Black */
+  /* background-color: rgb(255, 255, 255); Black */
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
 }

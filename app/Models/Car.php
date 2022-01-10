@@ -9,6 +9,9 @@ class Car extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'plate_id';
+    public $incrementing = false;
+
     protected $fillable = [
         'plate_id',
         'manufacturer',
@@ -28,10 +31,13 @@ class Car extends Model
     ];
 
     public function carType(){
-        return $this->hasOne('App\Models\CarType','type','type');
+        return $this->hasOne(CarType::class,'type','type');
     }
 
     public function carOffice(){
-        return $this->hasOne('App\Models\Office','officeNo','officeNo');
+        return $this->hasOne(Office::class,'officeNo','officeNo');
+    }
+    public function carReservation(){
+        return $this->hasMany(Reservation::class,'plate_id','plate_id');
     }
 }

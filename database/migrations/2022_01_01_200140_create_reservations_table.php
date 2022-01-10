@@ -22,10 +22,11 @@ class CreateReservationsTable extends Migration
             $table->string('dropoff_location');
             $table->string('plate_id');
             $table->integer('SSN');
+            $table->boolean('paid');
             $table->unsignedBigInteger('user_id');
             $table->foreign('plate_id')->references("plate_id")->on('cars')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign(['SSN','user_id'])->references(['SSN','user_id'])->on('customers')->onUpdate('cascade')->onDelete('restrict');
-            $table->primary(['SSN', 'user_id','plate_id','start_date','end_date']);
+            $table->primary(['SSN', 'user_id','plate_id','res_id']);
             $table->timestamps();
         });
     }

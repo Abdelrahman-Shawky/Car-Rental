@@ -22,7 +22,7 @@ class CreateCustomersTable extends Migration
             $table->string('lname');
             $table->integer('age');
             $table->string('gender');
-            $table->integer('license_no');
+            $table->string('license_no');
             $table->integer('phone');
             $table->string('city');
             $table->string('country');

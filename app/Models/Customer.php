@@ -22,5 +22,9 @@ class Customer extends Model
         'country',
         'image'
     ];
+
+    public function User(){
+        return $this->belongsTo(User::class,'id','user_id');
+    }
 }
 

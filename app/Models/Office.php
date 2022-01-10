@@ -17,4 +17,9 @@ class Office extends Model
         'phone'
 
     ];
+
+    public function car(){
+        return $this->belongsTo(Car::class,'OfficeNo','officeNo');
+
+    }
 }

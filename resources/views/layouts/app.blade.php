@@ -65,11 +65,25 @@
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->username }}
-                                    <img class="img" src="{{ asset('images/'.Auth::user()->Customer->image) }}" alt="User"
+                                    @if(!is_null(Auth::user()->Customer))
+                                        <img class="img" src="{{ asset('uploads/customers/'.Auth::user()->Customer->image) }}" alt="User"
                                         width="50px" height="50px" style="border-radius: 50%;">
+                                    @endif
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    @if(is_null(Auth::user()->Customer))
+                                        <a class="dropdown-item" href="{{url('completeProfile') }}"
+                                        class="btn btn-primary float-end">Complete Profile</a>
+                                    @else
+                                        <a class="dropdown-item" href="{{url('reservations') }}"
+                                        class="btn btn-primary float-end">My Reservations</a>
+                                    @endif
+                                    @if(!is_null(Auth::user()->Admin))
+                                    <a class="dropdown-item" href="{{url('dashboard') }}"
+                                        class="btn btn-primary float-end">Admin Dashboard</a>
+                                    @endif
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

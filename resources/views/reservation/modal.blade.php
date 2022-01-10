@@ -27,7 +27,7 @@
 
       </div>      
       <div class="modal-footer">
-            <form action="/reserve/{{$car->plate_id}}/{{$pickupDate}}/{{$dropoffDate}}/{{$pickupLocation}}/{{$dropoffLocation}}" enctype="multipart/form-data" method="POST">
+            <form action="/reserve/{{$car->plate_id}}/{{$pickupDate}}/{{$dropoffDate}}/{{$pickupLocation}}/{{$dropoffLocation}}/{{$numOfDays}}" enctype="multipart/form-data" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-danger" style="border-radius:15px;">Confirm Reservation</button>
             </form>
