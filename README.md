@@ -18,4 +18,12 @@ reserve cars from anywhere in the world, and search for available cars by variou
 
 ## Built With
 - Laravel PHP framework for the back-end
-- Blade template engine for the fron-end
+- Blade template engine for the front-end
+
+## Architecture
+- Used MVC architecture for separation of concerns improving maintainability and scalability
+- Implemented a database management system using MySQL utilizing relational models
+- Working with dynamic content and blade templating engine
+- User signup and login authentication 
+- Implemented an admin dashboard with higher access rights and advanced searching capabilities
+
